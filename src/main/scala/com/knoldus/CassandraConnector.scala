@@ -3,8 +3,12 @@ package com.knoldus
 import com.datastax.driver.core.{Cluster, ResultSet, Session}
 import com.knoldus.utils.ConfigReader
 
-class CassandraConnector {
+trait CassandraConnector {
 
+  /**
+    * This method creates the cluster by configuring port number and host
+    * @return Cassandra Cluster
+    */
   def getCasssandraBuilder: Cluster = {
     Cluster.builder()
       .addContactPoint(ConfigReader.getCassandraHost)
@@ -12,6 +16,13 @@ class CassandraConnector {
       .build()
   }
 
+  /**
+    * This method connects to cassandra keyspace
+    *
+    * @param keySpaceName
+    * @param cluster
+    * @return session
+    */
   def getSession(keySpaceName: String, cluster: Cluster): Session = {
     cluster.connect(keySpaceName)
   }
@@ -21,3 +32,5 @@ class CassandraConnector {
   }
 
 }
+
+object CassandraConnector extends CassandraConnector
