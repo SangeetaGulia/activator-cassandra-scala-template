@@ -1,10 +1,10 @@
-package com.knoldus.utils
+package com.knoldus
 
 import com.datastax.driver.core.{Cluster, ResultSet, Session}
-import com.knoldus.CassandraConnector
+import com.knoldus.utils.ConfigReader
 
-import scala.util.{Failure, Success, Try}
 import scala.collection.JavaConversions
+import scala.util.{Failure, Success, Try}
 
 object Launcher extends App {
 
@@ -15,6 +15,8 @@ object Launcher extends App {
     case Success(cluster) =>
       val session = getCassandraSession(ConfigReader.getKeyspaceName, cluster)
       runQuery(session)
+      session.close()
+      cluster.close()
     case Failure(exception) => println("Unable to Connect to Cassandra" + exception)
   }
 
